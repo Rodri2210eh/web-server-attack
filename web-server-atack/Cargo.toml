@@ -8,6 +8,10 @@ edition = "2021"
 [[bin]]
 name = "HTTPClient"
 path = "src/HTTPClient.rs"
+
+[[bin]]
+name = "prethread-webserver"
+path = "src/prethread-webserver.rs"
  
 [dependencies]
 curl = "0.4.43"
