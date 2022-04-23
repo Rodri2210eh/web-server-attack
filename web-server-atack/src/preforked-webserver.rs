@@ -2,14 +2,35 @@ use std::io::prelude::*;
 use std::net::TcpListener;
 use std::net::TcpStream;
 use std::fs;
-use std::thread;
 use std::env;
+use std::io::prelude::*;
 
-fn main() {
+
+
+pub fn main() {
+    println!("Hola");
+    env::set_var("RUST_BACKTRACE", "FULL");
     let args: Vec<String> = env::args().collect();
-    let mut cantPro:i32 = 1;
-    if args.len() > 1 {
-        let mut cantPro: i32 = args[2].parse().unwrap();
+    let mut cantPro:i32 = 4;
+    println!("{}", args.len());
+    let mut puerto:i32 = 3000;
+    if args.len() > 3 {
+       if args[1] == "prethread-webserver"{
+          cantPro = args[2].parse().unwrap();
+          puerto = args[3].parse().unwrap();
+       }
+    } else if args.len() > 2 {
+       if args[1] == "prethread-webserver"{
+          cantPro = args[2].parse().unwrap();
+       }
+    }else if args.len() > 1 {
+        if args[1] != "prethread-webserver"{
+          cantPro = args[1].parse().unwrap();
+       }
+    }else if args.len() > 2 {
+       if args[1] != "prethread-webserver"{
+          puerto = args[2].parse().unwrap();
+       }
     }
     let listener = TcpListener::bind("127.0.0.1:3000").unwrap();
 

@@ -4,14 +4,37 @@ use std::net::TcpStream;
 use std::fs;
 use std::thread;
 use std::env;
+use std::time::Duration;
 
 pub fn main() {
+    println!("Hola");
+    env::set_var("RUST_BACKTRACE", "FULL");
     let args: Vec<String> = env::args().collect();
-    let mut hilos:i32 = 1;
-    if args.len() > 2 {
-        let mut hilos: i32 = args[2].parse().unwrap();
+    let mut hilos:i32 = 4;
+    println!("{}", args.len());
+    let mut puerto:i32 = 3000;
+    if args.len() > 3 {
+       if args[1] == "prethread-webserver"{
+          hilos = args[2].parse().unwrap();
+          puerto = args[3].parse().unwrap();
+       }
+    } else if args.len() > 2 {
+       if args[1] == "prethread-webserver"{
+          hilos = args[2].parse().unwrap();
+       }
+    }else if args.len() > 1 {
+        if args[1] != "prethread-webserver"{
+          hilos = args[1].parse().unwrap();
+       }
+    }else if args.len() > 2 {
+       if args[1] != "prethread-webserver"{
+          puerto = args[2].parse().unwrap();
+       }
     }
-    let listener = TcpListener::bind("127.0.0.1:3000").unwrap();
+    let mut listen =String::new();
+    listen.push_str("127.0.0.1:");
+    listen.push_str(&puerto.to_string());
+    let listener = TcpListener::bind(listen).unwrap();
 
     for stream in listener.incoming() {
         let stream = stream.unwrap();
@@ -21,6 +44,7 @@ pub fn main() {
             hilos = hilos -1;
             thread::spawn(|| {
                handle_connection(stream);
+               thread::sleep(Duration::from_millis(1));
             });
             hilos = hilos + 1;
         }
@@ -28,6 +52,7 @@ pub fn main() {
 }
 
 pub fn path_exists(path: &str) -> bool {
+    
     fs::metadata(path).is_ok()
 }
 
@@ -48,6 +73,7 @@ fn handle_connection(mut stream: TcpStream) {
         let message:Vec<&str>= requestT.split(" ").collect();
         let mut getFile:String = message[1].to_string();
         getFile.remove(0);
+        println!("{}",getFile);
         if path_exists(&getFile){
             let contents = fs::read_to_string(getFile).unwrap();
 
