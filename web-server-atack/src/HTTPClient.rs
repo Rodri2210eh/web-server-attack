@@ -20,16 +20,21 @@ pub fn main(){
      println!("Bienvenido al HTTPClient, con este programa se conectara al servidor usando la libreria curl \n\n");
      i = i + 1;
   }
+  println!("{}",args[i]);
   if args[i] == "get"{
-    //genera un request tipo get al servidor en el puerto dado 
-     let puerto:String = args[i+1];
-     let archivo:String = args[i+2];
+     let mut puerto = "3000";
+     let mut archivo = "holamundo.html";
+     //genera un request tipo get al servidor en el puerto dado
+     if args.len() > i+2{
+       let puerto:&str = &args[i+1];
+       let archivo:&str = &args[i+2];
+     }
      let mut listen =String::new();
      listen.push_str("127.0.0.1:");
-     listen.push_str(&puerto);
+     listen.push_str(puerto);
      listen.push_str("/");
-     listen.push_str(&archivo);
-     easy.url(listen).unwrap();
+     listen.push_str(archivo);
+     easy.url(&listen).unwrap();
      easy.write_function(|data| {
         stdout().write_all(data).unwrap();
         Ok(data.len())
