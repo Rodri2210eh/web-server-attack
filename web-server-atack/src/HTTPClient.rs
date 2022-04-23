@@ -9,6 +9,7 @@ use reqwest;
 #[path = "./prethread-webserver.rs"] mod prethreadwebserver;
 #[path = "./preforked-webserver.rs"] mod preforkedwebserver;
 
+//Metodo main, se encarga de recibir los parametros y llamar los metodos requeridos por el usuario
 pub fn main(){
   env::set_var("RUST_BACKTRACE", "1");
   let args: Vec<String> = env::args().collect();
@@ -19,7 +20,22 @@ pub fn main(){
      println!("Bienvenido al HTTPClient, con este programa se conectara al servidor usando la libreria curl \n\n");
      i = i + 1;
   }
-  if args[i] == "prethread-webserver"{
+  if args[i] == "get"{
+     let puerto:String = args[i+1]
+     let archivo:String = args[i+2]
+     let mut listen =String::new();
+     listen.push_str("127.0.0.1:");
+     listen.push_str(&puerto);
+     listen.push_str("/");
+     listen.push_str(&archivo);
+     easy.url(listen).unwrap();
+     easy.write_function(|data| {
+        stdout().write_all(data).unwrap();
+        Ok(data.len())
+     }).unwrap();
+     easy.perform().unwrap();
+     
+  } else if args[i] == "prethread-webserver"{
      thread::spawn(|| {
         prethreadwebserver::main();
         thread::sleep(Duration::from_millis(1));

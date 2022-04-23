@@ -6,6 +6,7 @@ use std::thread;
 use std::env;
 use std::time::Duration;
 
+//Metodo main, se encarga de recibir los parametros y llamar los metodos requeridos por el usuario, se conecta al puerto deseado ademas se encarga de crear los hilos del servidor
 pub fn main() {
     println!("Hola");
     env::set_var("RUST_BACKTRACE", "FULL");
@@ -50,12 +51,13 @@ pub fn main() {
         }
     }
 }
-
+//verifica si un archivo o path existe
 pub fn path_exists(path: &str) -> bool {
     
     fs::metadata(path).is_ok()
 }
 
+//maneja los request depende de la peticion requerida genera y envia una respuesta al servidor
 fn handle_connection(mut stream: TcpStream) {
     let mut buffer = [0; 1024];
 
