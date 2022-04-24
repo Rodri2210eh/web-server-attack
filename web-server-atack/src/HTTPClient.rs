@@ -21,6 +21,7 @@ pub fn main(){
      i = i + 1;
   }
   if args[i] == "get"{
+    //genera un request tipo get al servidor en el puerto dado 
      let puerto:String = args[i+1]
      let archivo:String = args[i+2]
      let mut listen =String::new();
@@ -36,6 +37,7 @@ pub fn main(){
      easy.perform().unwrap();
      
   } else if args[i] == "prethread-webserver"{
+    //inicia el servidor por medio de un hilo y en el otro hilo realiza un request al servidor
      thread::spawn(|| {
         prethreadwebserver::main();
         thread::sleep(Duration::from_millis(1));
@@ -50,6 +52,7 @@ pub fn main(){
      thread::sleep(Duration::from_millis(1));
      
   } else {
+    //inicia el servidor por medio de un hilo y en el otro hilo realiza un request al servidor
      thread::spawn(|| {
         preforkedwebserver::main();
         thread::sleep(Duration::from_millis(1));
