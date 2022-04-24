@@ -1,5 +1,6 @@
 from concurrent.futures import ThreadPoolExecutor
 import sys
+import os
 
 
 """
@@ -9,8 +10,6 @@ import sys
 
 def process_command(argumentos):
     len_args = len(argumentos)
-    print("Numero de argumenos:" + str(len_args))
-    print(argumentos)
     
     if len_args < 7:
         print("Error sintaxis: stress -n <cantidad-hilos> HTTPclient -h <host> [<lista-comandos-a-ejecutar>]")
@@ -27,14 +26,22 @@ def process_command(argumentos):
     return [threads, client]
 
 
+def listToString(command_list): 
+    str = "" 
+    for i in command_list: 
+        str += i + " "
+    return str 
+
 
 def main():
     argumentos = sys.argv
-    (a, b) = process_command(argumentos)
-    print(a)
-    print(b)
+    (num_threads, lista_comando_cliente) = process_command(argumentos)
+    comando_cliente = listToString(lista_comando_cliente)
+    print("Numero de Threads: " + str(num_threads))
+    print("Comando HTTPclient: " + comando_cliente)
     
-
+    with ThreadPoolExecutor(max_workers=num_threads) as executor:
+        future = executor.submit(os.system("ARCHIVO" + comando_cliente))
 
 main()
 
