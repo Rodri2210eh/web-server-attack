@@ -36,7 +36,7 @@ def listToString(command_list):
 
 """
     Utiliza ThreadPoolExecutor para ejecutar una llamada las veces que el usuario
-    haya especificado como parametro max_workers=num_threads
+    haya especificado como parametro 
 """
 def main():
     argumentos = sys.argv
