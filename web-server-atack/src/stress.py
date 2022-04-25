@@ -2,12 +2,10 @@ from concurrent.futures import ThreadPoolExecutor
 import sys
 import os
 
-
 """
-    stress -n <cantidad-hilos> HTTPclient -h <host-a-conectar> [<lista-de-comandos-a-ejecutar>]
-        1   2       3               4       5       6                       7
+    Función para procesar los comandos ingresados por el usuario, distingue el número de threads, host y
+    la lista de comandos a ejecutar
 """
-
 def process_command(argumentos):
     len_args = len(argumentos)
     
@@ -26,6 +24,9 @@ def process_command(argumentos):
     return [threads, client]
 
 
+"""
+    Convierte una lista a un string
+"""
 def listToString(command_list): 
     str = "" 
     for i in command_list: 
@@ -33,6 +34,10 @@ def listToString(command_list):
     return str 
 
 
+"""
+    Utiliza ThreadPoolExecutor para ejecutar una llamada las veces que el usuario
+    haya especificado como parametro max_workers=num_threads
+"""
 def main():
     argumentos = sys.argv
     (num_threads, lista_comando_cliente) = process_command(argumentos)
@@ -40,7 +45,7 @@ def main():
     print("Numero de Threads: " + str(num_threads))
     print("Comando HTTPClient: " + comando_cliente)
     
-    with ThreadPoolExecutor(max_workers=num_threads) as executor:
+    with ThreadPoolExecutor() as executor:
         for n in range(num_threads):
             executor.submit(os.system("cargo run --bin " + comando_cliente))
 
