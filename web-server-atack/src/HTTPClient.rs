@@ -22,8 +22,8 @@ pub fn main(){
   }
   if args[i] == "get"{
     //genera un request tipo get al servidor en el puerto dado 
-     let puerto:String = args[i+1]
-     let archivo:String = args[i+2]
+     let puerto:String = args[i+1];
+     let archivo:String = args[i+2];
      let mut listen =String::new();
      listen.push_str("127.0.0.1:");
      listen.push_str(&puerto);
